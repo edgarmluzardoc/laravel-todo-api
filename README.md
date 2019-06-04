@@ -53,3 +53,7 @@
 - Username: `root`
 - Password: `secret`
 - Port: `33063`
+
+## Further optimisations
+
+For POST endpoint, the params can be passed as a paylod in body in json format.
