@@ -5,6 +5,9 @@ use Illuminate\Database\Seeder;
 
 class UsersTableSeeder extends Seeder
 {
+    /**
+     * Constants for this seeder
+     */
     const DEFAULT_USERS_SEEDS = 5;
     const DEFAULT_USERS_PASSWORD = '123456';
     

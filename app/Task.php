@@ -17,7 +17,6 @@ class Task extends Model
     protected $fillable = [
         'title',
         'date',
-        // 'completed',
     ];
 
     /**
@@ -28,8 +27,5 @@ class Task extends Model
         return $this->belongsToMany(User::class, 'task_user')
             ->withTimestamps()
             ->withPivot(['completed']);
-        // return $this->belongsToMany('App\User');
-        // return $this->belongsToMany('App\User', 'users_tasks', 'user_id', 'task_id');
-        // return $this->belongsToMany(User::class, 'user_id');
     }
 }

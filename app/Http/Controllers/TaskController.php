@@ -3,16 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Task;
-use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class TaskController extends Controller
 {
+    /**
+     * Class variables
+     */
     protected $request;
     protected $task;
 
     /**
+     * Class construct
      *
      * @param Request $request
      * @param Task $task
@@ -24,7 +27,9 @@ class TaskController extends Controller
     }
 
     /**
-     * TODO doc
+     * Gets all tasks with its users
+     *
+     * @return json
      */
     public function getAll()
     {
@@ -33,7 +38,9 @@ class TaskController extends Controller
     }
 
     /**
-     * TODO doc
+     * Creates a tasks
+     *
+     * @return json
      */
     public function create()
     {
@@ -48,14 +55,17 @@ class TaskController extends Controller
         // Adding users if passed
         if (!empty($data['userIds'])) {
             $userIds = explode(',', $data['userIds']);
-            $this->task->users()->attach($userIds);    
+            $this->task->users()->attach($userIds);
         }
 
         return $this->formatResponse('Successfully created', Response::HTTP_CREATED);
     }
 
     /**
-     * TODO doc
+     * Updates a tasks
+     *
+     * @param int $id - Task id to be updated
+     * @return json
      */
     public function update($id)
     {
@@ -73,7 +83,7 @@ class TaskController extends Controller
         $task->users()->detach();
         if (!empty($data['userIds'])) {
             $userIds = explode(',', $data['userIds']);
-            
+
             $task->users()->attach($userIds);
         }
 
@@ -83,8 +93,8 @@ class TaskController extends Controller
     /**
      * Remove the specified task
      *
-     * @param int $id
-     * @return \Illuminate\Http\Response
+     * @param int $id - Task id to be deleted
+     * @return json
      */
     public function delete($id)
     {
@@ -96,7 +106,10 @@ class TaskController extends Controller
     }
 
     /**
-     * TODO doc
+     * Marks a task as completed
+     *
+     * @param int $id - Task id to be marked as completed
+     * @return json
      */
     public function completed($id)
     {

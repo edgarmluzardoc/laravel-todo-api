@@ -26,7 +26,6 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        // 'remember_token',
     ];
 
     /**
@@ -35,7 +34,5 @@ class User extends Authenticatable
     public function tasks()
     {
         return $this->belongsToMany(Task::class, 'task_user')->withTimestamps();
-        // return $this->belongsToMany('App\Task', 'users_tasks', 'user_id', 'task_id');
-        // return $this->belongsToMany('App\Task');
     }
 }
