@@ -7,15 +7,32 @@
 
 ## How to setup
 
-1. Clone this repo: `git@github.com:edgarmluzardoc/laravel-todo-api.git`
-2. Run Docker compose on this repo root directory:
+1. Clone this repo: `git clone git@github.com:edgarmluzardoc/laravel-todo-api.git`
+2. Go to the root directory of the repo you just cloned.
+3. Update your vendor files. Run:
+    ```
+    composer update
+    ```
+
+4. Run Docker compose:
     ```
     docker-compose up -d
     ```
 
-3. Go to: http://localhost:8080/
+5. Run database migration:
+    ```
+    php artisan migrate
+    ```
 
-4. You are all set! You should see the default Lavarel welcome page.
+6. Run database seeder:
+    ```
+    php artisan db:seed
+    ```
+    NOTE: Because this project is dockerised, the previous command will set up the database so a sql dump is not needed. However, find a example sql file here: 
+
+7. Go to: http://localhost:8080/
+
+8. You are all set! You should see the default Lavarel welcome page.
 
 ## Testing endpoints
 
