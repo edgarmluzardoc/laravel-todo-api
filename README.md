@@ -28,7 +28,7 @@
     ```
     php artisan db:seed
     ```
-    NOTE: Because this project is dockerised, the previous command will set up the database so a sql dump is not needed. However, find a example sql file here: 
+    NOTE: Because this project is dockerised, the previous command will set up the database so a sql dump is not needed. However, find a example sql file here: https://github.com/edgarmluzardoc/laravel-todo-api/blob/master/doc/mig_db_2019-06-04.sql
 
 7. Go to: http://localhost:8080/
 
@@ -45,3 +45,11 @@
     | Edit a task | PUT, PATCH | `http://localhost:8080/api/task/{taskId}?title={title}&date={date}&userIds={userIds}` | `taskId` | `title`, `date`, `userIds` |
     | Delete a task | DELETE | `http://localhost:8080/api/task/{taskId}` | `taskId` | N/A |
     | Mark a task as complete | PUT | `http://localhost:8080/api/task/{taskId}/completed?userId={userId}` | `taskId`, `userId` | N/A |
+
+## Database credentials
+
+- Database: `mig_db`
+- Host: `127.0.0.1`
+- Username: `root`
+- Password: `secret`
+- Port: `33063`
