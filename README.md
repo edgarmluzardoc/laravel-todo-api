@@ -46,6 +46,8 @@
     | Delete a task | DELETE | `http://localhost:8080/api/task/{taskId}` | `taskId` | N/A |
     | Mark a task as complete | PUT | `http://localhost:8080/api/task/{taskId}/completed?userId={userId}` | `taskId`, `userId` | N/A |
 
+    NOTE: Find an example collection (you can import it into Postman) for all endpoints here: https://github.com/edgarmluzardoc/laravel-todo-api/blob/master/doc/Todo%20API.postman_collection.json
+
 ## Database credentials
 
 - Database: `mig_db`
