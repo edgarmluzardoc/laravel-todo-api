@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Task;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Validator;
 
 class TaskController extends Controller
 {
@@ -44,10 +46,18 @@ class TaskController extends Controller
      */
     public function create()
     {
-        // TODO validate fields
+        // Validating fields needed
+        $data = $this->request->all();
+        $validator = Validator::make($data, [
+            'title' => 'required',
+            'date' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->formatResponse('Error', Response::HTTP_BAD_REQUEST, null, $validator->messages());
+        }
 
         // Creating task
-        $data = $this->request->all();
         $this->task->title = $data['title'];
         $this->task->date = $data['date'];
         $this->task->save();
@@ -55,6 +65,19 @@ class TaskController extends Controller
         // Adding users if passed
         if (!empty($data['userIds'])) {
             $userIds = explode(',', $data['userIds']);
+
+            // Validating that user ids exist
+            $usersErrors = [];
+            foreach ($userIds as $userId) {
+                $user = User::find($userId);
+                if (empty($user)) {
+                    $usersErrors['user'][] = "User id [$userId] not found";
+                }
+            }
+
+            if (!empty($usersErrors)) {
+                return $this->formatResponse('Error', Response::HTTP_NOT_FOUND, null, $usersErrors);
+            }
             $this->task->users()->attach($userIds);
         }
 
@@ -69,21 +92,39 @@ class TaskController extends Controller
      */
     public function update($id)
     {
-        // TODO validate fields
-
-        $data = $this->request->all();
-
+        // Check if task id exists
         $task = $this->task->find($id);
+        if (empty($task)) {
+            return $this->formatResponse('Error', Response::HTTP_NOT_FOUND, null, ['Task id not found']);
+        }
 
-        $task->title = $data['title'];
-        $task->date = $data['date'];
+        // Checking what data to update from the task
+        $data = $this->request->all();
+        if (!empty($data['title'])) {
+            $task->title = $data['title'];
+        }
+        if (!empty($data['date'])) {
+            $task->date = $data['date'];
+        }
         $task->save();
 
-        // Updating users
-        $task->users()->detach();
+        // Updating users if needed
         if (!empty($data['userIds'])) {
+            $task->users()->detach();
             $userIds = explode(',', $data['userIds']);
 
+            // Validating that user ids exist
+            $usersErrors = [];
+            foreach ($userIds as $userId) {
+                $user = User::find($userId);
+                if (empty($user)) {
+                    $usersErrors['user'][] = "User id [$userId] not found";
+                }
+            }
+
+            if (!empty($usersErrors)) {
+                return $this->formatResponse('Error', Response::HTTP_NOT_FOUND, null, $usersErrors);
+            }
             $task->users()->attach($userIds);
         }
 
@@ -98,7 +139,12 @@ class TaskController extends Controller
      */
     public function delete($id)
     {
+        // Check if task id exists
         $task = $this->task->find($id);
+        if (empty($task)) {
+            return $this->formatResponse('Error', Response::HTTP_NOT_FOUND, null, ['Task id not found']);
+        }
+
         $task->users()->detach();
         $task->delete();
 
@@ -113,14 +159,37 @@ class TaskController extends Controller
      */
     public function completed($id)
     {
-        //TODO validate fields
+        // Check if task id exists
+        $task = $this->task->find($id);
+        if (empty($task)) {
+            return $this->formatResponse('Error', Response::HTTP_NOT_FOUND, null, ['Task id not found']);
+        }
+
+        // Validating fields
         $data = $this->request->all();
+        $validator = Validator::make($data, [
+            'userId' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->formatResponse('Error', Response::HTTP_BAD_REQUEST, null, $validator->messages());
+        }
+        
+        // Validating that user ids exist
         $userId = $data['userId'];
+        $user = User::find($userId);
+        if (empty($user)) {
+            $usersErrors['user'][] = "User id [$userId] not found";
+        }
+
+        if (!empty($usersErrors)) {
+            return $this->formatResponse('Error', Response::HTTP_NOT_FOUND, null, $usersErrors);
+        }
+
+        // Preparing data for update
         $attributes = [
             'completed' => true,
         ];
-
-        $task = $this->task->find($id);
         $task->users()->updateExistingPivot($userId, $attributes);
 
         return $this->formatResponse('Successfully marked as completed', Response::HTTP_OK);

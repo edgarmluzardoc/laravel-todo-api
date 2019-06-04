@@ -17,8 +17,9 @@ class Controller extends BaseController
      * @param string $message - Response message 
      * @param int $status - Response status code
      * @param mixed $data - Data to be added to the response if passed
+     * @param mixed $errors - Errors to be added to the response if passed
      */
-    public function formatResponse(string $message, int $status, $data = null)
+    public function formatResponse(string $message, int $status, $data = null, $errors = null)
     {
         $response = [
             'message' => $message,
@@ -28,6 +29,10 @@ class Controller extends BaseController
         if (!empty($data)) {
             $response['data'] = $data;
         }
+        if (!empty($errors)) {
+            $response['errors'] = $errors;
+        }
+
         return response()->json($response);
     }
 }
