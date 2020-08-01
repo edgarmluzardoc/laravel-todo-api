@@ -58,4 +58,4 @@
 
 ## Further optimisations
 
-For POST endpoint, the params can be passed as a paylod in body in json format.
+For POST endpoint, the params can be passed as a payload in body in json format.
